@@ -1,3 +1,3 @@
 #!/bin/bash
 
-ansible testserver -vvvvv --module-name ping
+ansible targetserver -vvvvv --module-name ping

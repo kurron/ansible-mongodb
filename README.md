@@ -36,8 +36,67 @@ into for some of the optimizations to take affect.**
 
 #Tips and Tricks
 
+##Verifying The Setup
+Before trying the actual installation, it is often helpful to verify that all of your Ansible and SSH ducks are in a row.  We 
+have provided a convenience script that has Ansible execute a simple `ping` command against your instance.  Try running 
+`bin/ping-server.sh` to verify things are correctly set up.  If things are proper, you should see something similar to this:
+
+```bash
+bin/ping-server.sh 
+SSH password: 
+SUDO password[defaults to SSH password]: 
+targetserver | success >> {
+    "changed": false, 
+    "ping": "pong"
+}
+```
+
+##Verifying The MongoDB Installation
+The simplest way to validate the installation is SSH into the instance and run the MongoDB cli: `mongo`.  If MongoDB is alive and
+listening, you should see something like this:
+
+```
+MongoDB shell version: 3.0.6
+connecting to: test
+Welcome to the MongoDB shell.
+For interactive help, type "help".
+For more comprehensive documentation, see
+	http://docs.mongodb.org/
+Questions? Try the support group
+	http://groups.google.com/group/mongodb-user
+> 
+
+```
+
+If you see warnings about `hugepage` settings that probably means you have not rebooted the instance and the optimization script 
+hasn't been run yet.  Once you are in the shell, you can examine the MongoDB settings by executing `db.serverStatus()`.  That will 
+produce a large JSON document detailing all of MongoDB's current settings.  If you see that the `storageEngine` is using
+ `wiredTiger`, then things probably went well:
+
+```json
+	"storageEngine" : {
+		"name" : "wiredTiger"
+	},
+	"wiredTiger" : {
+		"uri" : "statistics:",
+		"LSM" : {
+			"sleep for LSM checkpoint throttle" : 0,
+			"sleep for LSM merge throttle" : 0,
+			"rows merged in an LSM tree" : 0,
+			"application work units currently queued" : 0,
+			"merge work units currently queued" : 0,
+			"tree queue hit maximum" : 0,
+			"switch work units currently queued" : 0,
+			"tree maintenance operations scheduled" : 0,
+			"tree maintenance operations discarded" : 0,
+			"tree maintenance operations executed" : 0
+		},
+        ...
+```
+
 #Troubleshooting
 
+##An Example Run
 A normal installation should look something like this:
 
 ```bash
@@ -107,5 +166,6 @@ targetserver               : ok=15   changed=9    unreachable=0    failed=0
 ```
 
 #License and Credits
+This project is licensed under the [Apache License Version 2.0, January 2004](http://www.apache.org/licenses/).
 
 *List of Changes*
