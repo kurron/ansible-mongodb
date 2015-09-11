@@ -1,11 +1,14 @@
 #!/usr/bin/env ansible-playbook
 
-- name: Group hosts by distribution 
+- name: Gather prerequisites 
   hosts: all
   gather_facts: True
   tasks:
-    - name: create groups based on distro
+    - name: create groups based on distribution
       group_by: key={{ ansible_distribution }}
+    - debug: msg="dbPath = {{ dbPath }}"
+    - debug: msg="engine = {{ engine }}"
+    - debug: msg="cacheSizeGB = {{ cacheSizeGB }}"
 
 - name: Install MongoDB
   hosts: Ubuntu
@@ -17,4 +20,6 @@
       apt_repository: repo='deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.0 multiverse' state=present
     - name: Install MongoDB
       apt: name=mongodb-org state=latest update_cache=true cache_valid_time=600
+    - name: Copy the custom configuration file into /etc 
+      template: src=templates/mongod.conf dest=/tmp/mongod.conf mode=0444 backup=yes force=yes
 
