@@ -3,7 +3,7 @@ targetserver ansible_ssh_host=192.168.1.33 ansible_ssh_port=22
 
 [all:vars]
 # specify a pre-exiting folder that is an XFS file system
-dbPath=/tmp/mongodb
+dbPath=/tmp/devan
 
 # the storage engine to use: wiredTiger or mmapv1 
 engine=wiredTiger
