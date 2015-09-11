@@ -25,5 +25,9 @@
       template: src=templates/mongod.conf dest=/etc/mongod.conf mode=0444 backup=yes force=yes
     - name: Set the permissions on the specified data directory
       file: path={{ dbPath }} owner=mongodb group=mongodb mode=0775 state=directory 
+    - name: Copy the huge pages disablement script
+      copy: src=files/disable-transparent-hugepages dest=/etc/init.d/disable-transparent-hugepages mode=0755 backup=no force=yes
+    - name: Make sure the script runs at boot time 
+      command: /usr/sbin/update-rc.d disable-transparent-hugepages defaults 
     - name: Restart MongoDB 
       service: name=mongod state=restarted
