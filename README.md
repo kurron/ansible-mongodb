@@ -3,7 +3,7 @@ This is an [Ansible](http://www.ansible.com/) playbook designed to greatly simpl
 of [MongoDB](https://www.mongodb.org/) into an [Ubuntu 14.04](http://www.ubuntu.com/) instance.  The playbook is:
 
 * quick -- normally taking only a few seconds to execute
-* configurable -- some of the more useful MongoDB settings are exposed as a convenient, single configuration file
+* configurable -- some of the more useful MongoDB settings are exposed as a single configuration file
 * convenient -- the default settings enable the most advanced storage engine MongoDB supports and are suitable for
 many projects
 
@@ -13,13 +13,14 @@ many projects
 * the instance must have an [XFS](https://en.wikipedia.org/wiki/XFS) partition large enough to store MongoDB's data files
 * the instance must have a user that has `sudo` privledges
 * the instance should have 4GB of RAM -- the default configuration allows MongoDB to claim 3GB of it
-* a box with the most current Ansible installed -- all testing was done using Ansible 1.9.3 on an Ubuntu 14.04 desktop
+* a box with the most current Ansible installed -- all testing was done using Ansible 1.9.3 on an Ubuntu 14.04 desktop talking 
+to an Ubuntu 14.04 server
  
 #Building
 Since this project is just a collection of configuration and data files for Ansible to consume, no building is necessary.
 
 #Installation
-Thee first step is to get the files onto your Ansible box.  A great way is to use [Git](https://git-scm.com/) and
+The first step is to get the files onto your Ansible box.  A great way is to use [Git](https://git-scm.com/) and
 simply clone this project via `git clone https://github.com/kurron/ansible-mongodb.git`.  Another option is to 
 [download the zip](https://github.com/kurron/ansible-mongodb/archive/master.zip) directly from GitHub.
 
@@ -30,9 +31,9 @@ XFS partition.** Failure to do this will prevent MongoDB from being properly ins
 SSH'ing into the instance.
 
 To install MongoDB all you have to do is issue `./playbook.yml` from the command line.  Ansible will ask you for the password 
-of the SSH account being used as well as the password to use for `sudo` (which is normally the same as the SSH account). In a few
+of the SSH account being used as well as the password to use for `sudo` (normally, you can just hit `Enter` here). In a few
 seconds your instance should have the most current MongoDB installed and running.  **Please note that you must reboot the instance 
-into for some of the optimizations to take affect.** 
+in order for some of the optimizations to take affect.** 
 
 #Tips and Tricks
 
@@ -65,7 +66,6 @@ For more comprehensive documentation, see
 Questions? Try the support group
 	http://groups.google.com/group/mongodb-user
 > 
-
 ```
 
 If you see warnings about `hugepage` settings that probably means you have not rebooted the instance and the optimization script 
@@ -174,7 +174,11 @@ PLAY RECAP ********************************************************************
 targetserver               : ok=15   changed=9    unreachable=0    failed=0   
 ```
 
+##Only Works On Ubuntu
+When Ansible runs, it gathers up information about the target machine and will refuse to provision machine if 
+it isn't an Ubuntu box.
+
 #License and Credits
 This project is licensed under the [Apache License Version 2.0, January 2004](http://www.apache.org/licenses/).
 
-*List of Changes*
+#List of Changes
