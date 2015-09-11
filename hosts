@@ -10,3 +10,6 @@ engine=wiredTiger
 
 # how much RAM, in GB, is MongoDB allowed to acquire for its own use
 cacheSizeGB=3
+
+# set to 1 in a test setting, 0 for a production setting
+notablescan=1

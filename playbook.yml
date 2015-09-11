@@ -9,6 +9,7 @@
     - debug: msg="dbPath = {{ dbPath }}"
     - debug: msg="engine = {{ engine }}"
     - debug: msg="cacheSizeGB = {{ cacheSizeGB }}"
+    - debug: msg="notablescan = {{ notablescan }}"
 
 - name: Install MongoDB
   hosts: Ubuntu
@@ -21,5 +22,6 @@
     - name: Install MongoDB
       apt: name=mongodb-org state=latest update_cache=true cache_valid_time=600
     - name: Copy the custom configuration file into /etc 
-      template: src=templates/mongod.conf dest=/tmp/mongod.conf mode=0444 backup=yes force=yes
-
+      template: src=templates/mongod.conf dest=/etc/mongod.conf mode=0444 backup=yes force=yes
+    - name: Restart MongoDB 
+      service: name=mongod state=restarted
