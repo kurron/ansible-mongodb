@@ -1,7 +1,7 @@
 # for the case where the host file is empty use the following entry:
 # localhost ansible_connection=local
 
-testserver ansible_ssh_host=192.168.1.52 ansible_ssh_port=22 custom_variable=foo
+testserver ansible_ssh_host=192.168.1.33 ansible_ssh_port=22 custom_variable=foo
 
 [all:vars]
 bob=ted
