@@ -52,7 +52,7 @@ targetserver | success >> {
 ```
 
 ##Verifying The MongoDB Installation
-The simplest way to validate the installation is SSH into the instance and run the MongoDB cli: `mongo`.  If MongoDB is alive and
+The simplest way to validate the MongoDB installation is to SSH into the instance and run the MongoDB cli: `mongo`.  If MongoDB is alive and
 listening, you should see something like this:
 
 ```
@@ -91,8 +91,17 @@ produce a large JSON document detailing all of MongoDB's current settings.  If y
 			"tree maintenance operations discarded" : 0,
 			"tree maintenance operations executed" : 0
 		},
-        ...
 ```
+
+##Double Check the Production Checklist
+The MongoDB folks have provided a [Production Checklist](http://docs.mongodb.org/manual/administration/production-checklist/) that 
+should be checked to verify that your instance is running with optimal settings.  Some settings, such as disabling hugepage, is 
+done by the playbook but many of them require a human to examine the environment and determine the proper settings.
+
+##Installing Ubuntu As A Virtual Machine
+When installing Ubuntu, make sure to hit the `F4` key and select `Minimal virtual machine`.  This will improve the performance 
+of the VM as well as enable some optimizations that MongoDB can take advantage of.  For example,  the `Use the noop disk scheduler 
+for virtualized drives in guest VMs` tip in the Production Checklist is already enabled.
 
 #Troubleshooting
 
