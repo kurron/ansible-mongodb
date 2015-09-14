@@ -6,15 +6,32 @@
   tasks:
     - name: create groups based on distribution
       group_by: key={{ ansible_distribution }}
-    - debug: msg="dbPath = {{ dbPath }}"
-    - debug: msg="engine = {{ engine }}"
-    - debug: msg="cacheSizeGB = {{ cacheSizeGB }}"
-    - debug: msg="notablescan = {{ notablescan }}"
 
 - name: Install MongoDB
   hosts: Ubuntu
   sudo: True
+  vars_prompt:
+    - name: "dbPath"
+      prompt: "Where to write the database files to. Should be a pre-exiting folder that is an XFS file system."
+      private: no
+    - name: "engine"
+      prompt: "Storage engine to use: wiredTiger or mmapv1."
+      private: no
+      default: "wiredTiger"
+    - name: "cacheSizeGB"
+      prompt: "how much RAM, in GB, is MongoDB allowed to acquire for its own use?"
+      private: no
+      default: "3"
+    - name: "notablescan"
+      prompt: "Refuse to run queries that are not backed by an index. Set to 1 during development and 0 in production."
+      private: no
+      default: "1"
+
   tasks:
+    - debug: msg="dbPath = {{ dbPath }}"
+    - debug: msg="engine = {{ engine }}"
+    - debug: msg="cacheSizeGB = {{ cacheSizeGB }}"
+    - debug: msg="notablescan = {{ notablescan }}"
     - name: Install Repository keys
       apt_key: state=present keyserver=keyserver.ubuntu.com id=7F0CEB10
     - name: Install MongoDB repository
