@@ -25,15 +25,14 @@ simply clone this project via `git clone https://github.com/kurron/ansible-mongo
 [download the zip](https://github.com/kurron/ansible-mongodb/archive/master.zip) directly from GitHub.
 
 Once you have the files available to you, you are going to have to edit the `hosts` file with a text editor.  The 
-file is documented and should be easily understood. **The `dbPath` entry must be adjusted to point to the instance's
-XFS partition.** Failure to do this will prevent MongoDB from being properly installed. **You must also edit the 
-`ansible.cfg` file, specifically the `remote_user` property.**  Failure to do this will prevent Ansible from 
-SSH'ing into the instance.
+file is documented and should be easily understood. **You must also edit the `ansible.cfg` file, specifically the 
+`remote_user` property.**  Failure to do this will prevent Ansible from SSH'ing into the instance.
 
 To install MongoDB all you have to do is issue `./playbook.yml` from the command line.  Ansible will ask you for the password 
-of the SSH account being used as well as the password to use for `sudo` (normally, you can just hit `Enter` here). In a few
-seconds your instance should have the most current MongoDB installed and running.  **Please note that you must reboot the instance 
-in order for some of the optimizations to take affect.** 
+of the SSH account being used as well as the password to use for `sudo` (normally, you can just hit `Enter` here). You will 
+also be prompted for configuration values.  **You must provide the directory to use to store the database files.** The other
+values have reasonable defaults that can optionally be changed. the In a few moments your instance should have the most current 
+MongoDB installed and running.  **Please note that you must reboot the instance in order for some of the optimizations to take affect.** 
 
 #Tips and Tricks
 
@@ -112,6 +111,10 @@ A normal installation should look something like this:
 ./playbook.yml 
 SSH password: 
 SUDO password[defaults to SSH password]: 
+Where to write the database files to. Should be a pre-exiting folder that is an XFS file system.: /var/mongodb
+Storage engine to use: wiredTiger or mmapv1. [wiredTiger]: 
+how much RAM, in GB, is MongoDB allowed to acquire for its own use? [3]: 
+Refuse to run queries that are not backed by an index. Set to 1 during development and 0 in production. [1]: 
 
 PLAY [Gather prerequisites] *************************************************** 
 
@@ -121,9 +124,14 @@ ok: [targetserver]
 TASK: [create groups based on distribution] *********************************** 
 changed: [targetserver]
 
+PLAY [Install MongoDB] ******************************************************** 
+
+GATHERING FACTS *************************************************************** 
+ok: [targetserver]
+
 TASK: [debug msg="dbPath = {{ dbPath }}"] ************************************* 
 ok: [targetserver] => {
-    "msg": "dbPath = /var/ronbo"
+    "msg": "dbPath = /var/mongodb"
 }
 
 TASK: [debug msg="engine = {{ engine }}"] ************************************* 
@@ -140,11 +148,6 @@ TASK: [debug msg="notablescan = {{ notablescan }}"] ***************************
 ok: [targetserver] => {
     "msg": "notablescan = 1"
 }
-
-PLAY [Install MongoDB] ******************************************************** 
-
-GATHERING FACTS *************************************************************** 
-ok: [targetserver]
 
 TASK: [Install Repository keys] *********************************************** 
 changed: [targetserver]
